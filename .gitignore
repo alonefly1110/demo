@@ -1,0 +1,13 @@
+*.iml
+########
+.idea/
+####
+*.project
+#####
+*.classpath
+###
+.settings/
+LOG_PATH_IS_UNDEFINED/
+*.swp
+###
+*.properties
