@@ -6,7 +6,7 @@ import cn.peakline.service.RedisService;
 import cn.peakline.service.UserService;
 import cn.peakline.utils.*;
 import com.google.gson.Gson;
-import com.yunpian.sdk.YunpianClient;
+import com.qiniu.util.Auth;
 import com.yunpian.sdk.YunpianException;
 import com.yunpian.sdk.model.ResultDO;
 import com.yunpian.sdk.model.SmsSingleSend;
@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -41,14 +39,14 @@ import static cn.peakline.utils.VerifyCodeUtils.outputImage;
  **/
 @RestController
 @RequestMapping("/common")
-public class LoginController {
+public class CommonController {
     private Gson gson = new Gson();
-    private Logger logger = Logger.getLogger(LoginController.class);
+    private Logger logger = Logger.getLogger(CommonController.class);
     private final UserService userService;
     private final RedisService redisService;
 
     @Autowired
-    public LoginController(UserService userService, RedisService redisService) {
+    public CommonController(UserService userService, RedisService redisService) {
         this.userService = userService;
         this.redisService = redisService;
     }
@@ -87,7 +85,7 @@ public class LoginController {
             userInfoMap.put("user_id", user.getId());
             userInfoMap.put("username", user.getUsername());
             redisService.set(uuid.toString().replace("-", ""), userInfoMap);
-            StringUtil.createCookie(response, uuid.toString().replace("-", ""), -1, "/");
+            StringUtil.createCookie(response, uuid.toString().replace("-", ""), -1);
             returnResult.setObject(user.getUsername());
         }
         returnResult.setStatus(user == null ? Constants.FAIL_STATUS : Constants.SUCCESS_STATUS)
@@ -140,25 +138,8 @@ public class LoginController {
 
     }
 
-    //    @RequestMapping("/sendSmsCode")
-    public void sendSmsCode(String phone) throws UnsupportedEncodingException {
-        String phoneCodes = "0123456789";
-        String url = "http://sms.106jiekou.com/utf8/sms.aspx";
-        String smsCode = VerifyCodeUtils.generateVerifyCode(6, phoneCodes);
-
-        YunpianClient client = new YunpianClient();
-
-
-        String postData = "account=m18519096948&password=alone881110&mobile=" + phone + "&content=" + URLEncoder.encode("您的验证码码：" + smsCode + "。", "UTF-8");
-        String ret = Send.SMS(postData, url);
-        logger.warn(ret);
-    }
-
     /**
      * 单条短信发送,智能匹配短信模板
-     * <p>
-     * //     * @param apikey 成功注册后登录云片官网,进入后台可查看
-     * //     * @param text   需要使用已审核通过的模板或者默认模板
      *
      * @param mobile 接收的手机号,仅支持单号码发送
      * @return json格式字符串
@@ -173,9 +154,16 @@ public class LoginController {
         YunpianRestClient client = new YunpianRestClient(apikey);//用apikey生成client,可作为全局静态变量
         SmsOperator smsOperator = client.getSmsOperator();//获取所需操作类
         ResultDO<SmsSingleSend> result = smsOperator.singleSend(mobile, text);//发送短信,ResultDO<?>.isSuccess()判断是否成功
-        System.out.println(result);
         return gson.toJson(result);
-//        return post("https://sms.yunpian.com/v2/sms/single_send.json", params);//请自行使用post方式请求,可使用Apache HttpClient
+    }
+
+    @RequestMapping("/getUpToken")
+    public String getUpToken(String callback) {
+        Map<String, String> result = new HashMap<>();
+        Auth auth = Auth.create(Constants.QINIU_ACCESS_KEY, Constants.QINIU_SECRET_KEY);
+        result.put("uptoken", auth.uploadToken(Constants.BUCKET_NAME));
+        result.put("domain", Constants.QINIU_DOMAIN);
+        return callback + "(" + gson.toJson(result) + ")";
     }
 
 }

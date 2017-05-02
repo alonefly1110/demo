@@ -1,6 +1,7 @@
 package cn.peakline.controller;
 
 import cn.peakline.dao.PersonDao;
+import cn.peakline.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/person")
 public class PersonController {
-    private final PersonDao personDao;
+
+    private final PersonService personService;
 
     @Autowired
-    public PersonController(PersonDao personDao) {
-        this.personDao = personDao;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
+
 }
