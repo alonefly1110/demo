@@ -1,7 +1,5 @@
 package cn.peakline.dto;
 
-import lombok.Data;
-
 import java.util.Date;
 
 /**
@@ -16,8 +14,9 @@ public class PersonDTO {
     private String phone;
     private String address;
     private String sex;
-    private Date birthday;
+    private String birthday;
     private String description;
+    private String headImg;
     private Date modifiedDate;
 
     public int getUserId() {
@@ -60,11 +59,11 @@ public class PersonDTO {
         this.sex = sex;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -74,6 +73,14 @@ public class PersonDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
     }
 
     public Date getModifiedDate() {

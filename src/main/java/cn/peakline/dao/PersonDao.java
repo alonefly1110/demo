@@ -10,4 +10,5 @@ import org.springframework.data.repository.CrudRepository;
  * @create 2017-04-26 下午3:15
  **/
 public interface PersonDao extends CrudRepository<Person,Long> {
+    Person findByUserId(int userId);
 }

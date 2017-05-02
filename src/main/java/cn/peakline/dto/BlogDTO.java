@@ -16,4 +16,6 @@ public class BlogDTO {
     private Integer userId;
     private String title;
     private String content;
+
+
 }

@@ -30,12 +30,12 @@ public class UserService {
     }
 
     public void saveUser(UserDTO userInfo) {
-        User user = new User();
-        if (userInfo.getUserId() != null) {
-            user = userDao.findOne(userInfo.getUserId());
+        User user = userDao.findOne(userInfo.getUserId());
+        if (user == null) {
+            user = new User();
+            user.setCreateDate(userInfo.getModifiedDate());
         }
         BeanUtils.copyProperties(userInfo, user);
-        if (userInfo.getUserId() == null) user.setCreateDate(new Date());
         userDao.save(user);
 
     }

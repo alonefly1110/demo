@@ -7,6 +7,7 @@ import cn.peakline.service.UserService;
 import cn.peakline.utils.*;
 import com.google.gson.Gson;
 import com.qiniu.util.Auth;
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.yunpian.sdk.YunpianException;
 import com.yunpian.sdk.model.ResultDO;
 import com.yunpian.sdk.model.SmsSingleSend;
@@ -52,6 +53,7 @@ public class CommonController {
     }
 
     @RequestMapping("/register")
+    @ApiOperation(value = "注册功能")
     public String register(HttpServletRequest request, UserDTO userInfo, String callback) {
         ReturnResult returnResult = new ReturnResult();
         User user = userService.getUserByUserName(userInfo.getUsername());
@@ -71,6 +73,7 @@ public class CommonController {
     }
 
     @RequestMapping("/login")
+    @ApiOperation(value = "登录功能")
     public String login(String callback, UserDTO userInfo, HttpServletResponse response, HttpServletRequest request) {
         User user = userService.getUserByUsernameAndPassword(userInfo);
         ReturnResult returnResult = new ReturnResult();

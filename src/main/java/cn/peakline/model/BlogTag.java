@@ -8,27 +8,27 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * 博客
+ * 标签
  *
  * @author maxiaoliang
- * @create 2017-04-26 下午4:45
+ * @create 2017-05-02 下午4:35
  **/
 @Entity
-@Table(name = "t_blog")
+@Table(name = "t_blog_tag")
 @Data
 @Accessors(chain = true)
-public class Blog {
+public class BlogTag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull
+    private String tagName;
+    @NotNull
     private Integer userId;
     @NotNull
-    private String title;
-    private String content;
-    @Column(name = "is_delete")
-    private Short Delete;
+    private Integer tagType;
+    @NotNull
     private Date createDate;
-    private Date modifiedDate;
+
 
 }

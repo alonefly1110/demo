@@ -23,9 +23,11 @@ public class Person {
     private int userId;
     private String name;
     private String phone;
+    private String sex;
     private String address;
     private String description;
-    private Date birthday;
+    private String birthday;
+    private String headImg;
     private Date createDate;
     private Date modifiedDate;
 }
